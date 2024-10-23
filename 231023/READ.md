@@ -1,4 +1,5 @@
 # DFS와 BFS
+```
 import sys
 # input = sys.stdin.readline
 sys.stdin = open('input.txt', 'r')
@@ -35,6 +36,10 @@ for _ in range(M):
     arr[start].append(end)
     arr[end].append(start)
 
+for i in range(N+1):
+    arr[i].sort()
+
+
 visited = [0] * (N+1)
 visited[V] = 1
 ans_dfs = []
@@ -47,3 +52,4 @@ bfs(V)
 
 print(*ans_dfs)
 print(*ans_bfs)
+```

@@ -1,49 +1,24 @@
-# DFS와 BFS
+# N과 M (4)
 import sys
-# input = sys.stdin.readline
-sys.stdin = open('input.txt', 'r')
+input = sys.stdin.readline
+# sys.stdin = open('input.txt', 'r')
 sys.setrecursionlimit(10**6)
+# 자연수 N과 M이 주어졌을 떄, 조건을 만족하는 길이가 M인 수열을 모두 구하는 프로그램
+# 1부터 N까지 자연수 중에서 M개를 고른 수열
+# 고른 수열은 비내림차순
+def nandm(now, cnt):
+    # lst.append(now)
+    if cnt == M:
+        print(*lst)
+        return
 
-def dfs(now):
-    ans_dfs.append(now)
-
-    for next in arr[now]:
-        if visited[next]: continue
-        visited[next] = 1
-        dfs(next)
-
-
-def bfs(here):
-    q = []
-    q.append(here)
-    ans_bfs.append(here)
-
-    while q:
-        now = q.pop(0)
-        for next in arr[now]:
-            if visited[next]: continue
-            q.append(next)
-            ans_bfs.append(next)
-            visited[next] = 1
+    for next in range(now, N+1):
+        lst.append(next)
+        nandm(next, cnt+1)
+        lst.pop()
 
 
-N, M, V = map(int, input().split())
-arr = [[] for _ in range(N+1)]
-
-for _ in range(M):
-    start, end = map(int, input().split())
-    arr[start].append(end)
-    arr[end].append(start)
-
-visited = [0] * (N+1)
-visited[V] = 1
-ans_dfs = []
-dfs(V)
-
-visited = [0] * (N+1)
-visited[V] = 1
-ans_bfs = []
-bfs(V)
-
-print(*ans_dfs)
-print(*ans_bfs)
+N, M = map(int, input().split())
+lst = []
+cnt = 0
+nandm(1, 0)
