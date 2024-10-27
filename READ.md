@@ -1,5 +1,47 @@
-# 1012. 유기농 배추
-## 완성 코드
+# 10/25
+## 2178. 미로 탐색
+```
+import sys
+from collections import deque
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
+
+directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] # 상하좌우
+
+def search_maze(y, x):
+    global cnt
+    q = deque()
+    q.append((1, y, x))
+    visited[y][x] = 1
+
+    while q:    # q가 비어있지 않을 동안 반복
+        move, y, x = q.popleft()
+
+        if y == N - 1 and x == M - 1:
+            cnt = min(cnt, move)
+            break
+
+        for dy, dx in directions:
+            ny, nx = y + dy, x + dx
+            if 0<=ny<N and 0<=nx<M and maze[ny][nx] and not visited[ny][nx]:
+                q.append((move + 1, ny, nx))
+                visited[ny][nx] = 1 # 방문 처리
+
+
+
+N, M = map(int, input().split())    # N x M: 세로 x 가로
+maze = [list(map(int, input().strip())) for _ in range(N)]
+
+visited = [[0 for _ in range(M)] for _ in range(N)]
+cnt = float('inf')
+search_maze(0, 0)
+print(cnt)
+```
+
+
+# 10/24
+## 1012. 유기농 배추
+### 완성 코드
 ```buildoutcfg
 import sys
 sys.stdin = open('input.txt','r')
@@ -45,7 +87,7 @@ for t in range(1, T+1):
 
     print(result)
 ```
-## 로직
+### 로직
 ```buildoutcfg
 1. 배추 밭 입력받기
 2. (0, 0)부터 시작 -> bfs를 활용하여 배추가 있는 지 탐색
@@ -58,7 +100,7 @@ for t in range(1, T+1):
 3. 상, 좌는 이미 탐색했을테니 하, 우만 탐색하면 visited배열을 안써도 되지 않을까 했는데 반례 존재..
 4. 방향배열을 까먹은 이슈...
 ```
-## 처음 구현 코드
+### 처음 구현 코드
 ```buildoutcfg
 import sys
 sys.stdin = open('input.txt','r')
@@ -107,7 +149,7 @@ for t in range(1, T+1):
     print(result)
 ```
 
-# 21736. 헌내기는 친구가 필요해
+## 21736. 헌내기는 친구가 필요해
 ```buildoutcfg
 # 캠퍼스 크기 N x M
 # 상하좌우로 이동 -> 방향배열
@@ -160,7 +202,7 @@ if cnt == 0:
 else:
     print(cnt)
 ```
-## 로직
+### 로직
 ```buildoutcfg
 1. 캠퍼스를 2차원 리스트로 입력받기
 2. 도연이 위치 I를 찾으면 start_y, start_x에 각각 위치 저장
@@ -169,4 +211,90 @@ else:
 5. 범위 내에 있으며, 이동 불가능한 곳이 아니고, 방문한 곳이 아니면 이동
 6. 이동한 곳이 P(사람)일 경우 cnt + 1
 7. 탐색이 끝나면 출력 -> cnt가 0이면 TT 출력, 1이상이면 cnt 값 출력
+```
+
+
+# 10/22
+## N과 M (2)
+```
+import sys
+# input = sys.stdin.readline
+sys.stdin = open('input.txt', 'r')
+sys.setrecursionlimit(10**6)
+# 자연수 N과 M이 주어졌을 떄, 조건을 만족하는 길이가 M인 수열을 모두 구하는 프로그램
+# 1부터 N까지 자연수 중에서 중복 없이 M개를 고른 수열
+# 고른 수열은 오름차순
+# 중복되는 수열 여러 번 출력하면 안되며, 각 수열은 공백으로 구분해서 출력
+def nandm(now, cnt):
+    if cnt == M:
+        print(*lst)
+
+    for next in range(now, N+1):
+        lst.append(next)
+        nandm(next+1, cnt+1)
+        lst.pop()
+
+
+N, M = map(int, input().split())
+lst = []
+cnt = 0
+nandm(1, 0)
+```
+## N과 M (4)
+```
+import sys
+input = sys.stdin.readline
+# sys.stdin = open('input.txt', 'r')
+sys.setrecursionlimit(10**6)
+# 자연수 N과 M이 주어졌을 떄, 조건을 만족하는 길이가 M인 수열을 모두 구하는 프로그램
+# 1부터 N까지 자연수 중에서 M개를 고른 수열
+# 고른 수열은 비내림차순
+def nandm(now, cnt):
+    # lst.append(now)
+    if cnt == M:
+        print(*lst)
+        return
+
+    for next in range(now, N+1):
+        lst.append(next)
+        nandm(next, cnt+1)
+        lst.pop()
+
+
+N, M = map(int, input().split())
+lst = []
+cnt = 0
+nandm(1, 0)
+```
+## N과 M (5)
+```
+import sys
+# input = sys.stdin.readline
+sys.stdin = open('input.txt', 'r')
+sys.setrecursionlimit(10**6)
+# 길이가 M인 수열을 모두 구하는 프로그램
+# N개의 자연수 중에서 M개를 고른 수열
+# 한줄에 하나씩 문제의 조건을 만족하는 수열 출력
+# 중복되는 수열을 여러 번 출력하면 안되며, 각 수열은 공백으로 구분해서 출력
+# 수열은 사전 순으로 증가하는 순서로 출력
+
+def dfs(now, cnt):
+    if cnt == M:
+        print(*ans)
+        return
+    for next in range(now, N):
+        if not v[next]:
+            v[next] = 1
+            ans.append(arr[next])
+            dfs(now, cnt+1)
+            ans.pop()
+            v[next] = 0
+
+
+N, M = map(int, input().split())
+arr = list(map(int, input().split()))
+arr.sort()
+ans = []
+v = [0] * N
+dfs(0,0)
 ```
